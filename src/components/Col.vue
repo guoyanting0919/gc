@@ -36,7 +36,7 @@
     <FullCalendar
       v-if="despatchDataFilter"
       locale="zh-tw"
-      defaultView="resourceTimeGridDay"
+      defaultView="resourceTimelineDay"
       datesAboveResources="true"
       :views="this.views"
       slotDuration="00:05"
@@ -49,7 +49,7 @@
       :header="{
         left: 'prev,next today',
         center: 'title',
-        right: 'resourceTimeGridDay,resourceTimeGridFourDay'
+        right: 'resourceTimelineDay,resourceTimelineWeek'
         }"
       :plugins="calendarPlugins"
       :weekends="calendarWeekends"
@@ -67,6 +67,7 @@
 // import orderData from "../assets/years.json";
 import { Calendar } from "@fullcalendar/core";
 import resourceDayGridPlugin from "@fullcalendar/resource-daygrid";
+import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -111,6 +112,7 @@ export default {
       startDate: "2020-04-15",
       endDate: "",
       calendarPlugins: [
+        resourceTimelinePlugin,
         resourceDayGridPlugin,
         dayGridPlugin,
         timeGridPlugin,
@@ -126,7 +128,7 @@ export default {
       const vm = this;
       await vm.$http
         .get(
-          "https://ntpcapi.1966.org.tw/api/Despatch/GetAllGroup?CompanyId=97&key=2020-04-21"
+          "https://ntpcapi.1966.org.tw/api/Despatch/GetAllGroup?CompanyId=97&key=2020-04-20"
         )
         .then(res => {
           console.log(res);
@@ -156,7 +158,7 @@ export default {
       };
       await vm.$http
         .get(
-          "https://ntpcapi.1966.org.tw/api/OrderDetails/GeOrderDetailtForDespatch/2020-04-21",
+          "https://ntpcapi.1966.org.tw/api/OrderDetails/GeOrderDetailtForDespatch/2020-04-20",
           config
         )
         .then(res => {
@@ -314,25 +316,18 @@ export default {
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/daygrid/main.css";
 @import "~@fullcalendar/timegrid/main.css";
+@import "~@fullcalendar/timeline/main.css";
+@import "~@fullcalendar/resource-timeline/main.css";
 
 .demo-app {
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;
 }
 .demo-app-top {
-  margin: 0 0 3em;
-  position: fixed;
-  z-index: 2;
-  top: 10%;
-  left: 20px;
-  width: 180px;
-  padding: 0 10px;
-  border: 1px solid #ccc;
-  background: #eee;
+  display: none;
 }
 .demo-app-calendar {
   max-width: 1240px;
-  margin: 40px auto;
 }
 #external-events {
   position: fixed;
@@ -352,5 +347,9 @@ export default {
 #external-events .fc-event {
   margin: 1em 0;
   cursor: move;
+}
+
+.fc-content .fc-widget-content {
+  height: 100px;
 }
 </style>

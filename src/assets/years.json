@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Conference",
+    "start": "2020-04-20",
+    "end": "2020-04-22",
+    "description": "description for All Day Event",
+    "category": "TypeA"
+  },
+  {
+    "title": "Meeting",
+    "start": "2020-04-21T10:30:00+00:00",
+    "end": "2020-04-21T12:30:00+00:00",
+    "description": "description for All Day Event",
+    "category": "TypeB"
+  },
+  {
+    "title": "Lunch",
+    "start": "2020-04-21T12:00:00+00:00",
+    "description": "description for All Day Event",
+    "category": "TypeC"
+  },
+  {
+    "title": "Birthday Party",
+    "start": "2020-04-22T07:00:00+00:00",
+    "category": "TypeD"
+  }
+]
