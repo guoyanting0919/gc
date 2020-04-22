@@ -4,11 +4,8 @@
     <button @click="signOut">signOut</button>
     <button @click="postEvent">post</button>
     <button @click="aa">aa</button>
-    <button id="authorize_button">authorize_button</button>
-    <button id="signout_button">signout_button</button>
   </div>
 </template>
-
 <script>
 import gapi from "gapi-client";
 export default {
@@ -20,7 +17,7 @@ export default {
   },
   methods: {
     aa() {
-      console.log(gapi.client.calendar);
+      console.log(gapi);
     },
     signIn() {
       this.$gAuth
@@ -52,6 +49,12 @@ export default {
     },
     postEvent() {
       const vm = this;
+      const config = {
+        headers: {
+          Authorization: ` Bearer ${vm.testToken}`,
+          Accept: "application/json"
+        }
+      };
       let data = {
         end: {
           date: "2020-04-20"
@@ -60,13 +63,15 @@ export default {
           date: "2020-04-18"
         }
       };
-      var request = gapi.client.calendar.events.insert({
-        calendarId: "primary",
-        resource: data
-      });
-      request.execute(function(event) {
-        appendPre("Event created: " + event.htmlLink);
-      });
+      this.$http
+        .post(
+          "https://content.googleapis.com/calendar/v3/calendars/primary/events?alt=json&key=AIzaSyCbZCjWSLPL3Vb_fd4ADMwVMpPhu-SRz40",
+          data,
+          config
+        )
+        .then(res => {
+          console.log(res);
+        });
     }
   }
 };
