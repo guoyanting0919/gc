@@ -4,6 +4,7 @@
     <button @click="signOut">signOut</button>
     <button @click="postEvent">post</button>
     <button @click="aa">aa</button>
+    1212
   </div>
 </template>
 <script>
