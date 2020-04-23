@@ -3,8 +3,7 @@
     <!-- <HelloWorld></HelloWorld> -->
     <!-- <Hello /> -->
     <!-- <Col /> -->
-    <!-- <Wz /> -->
-    <gc />
+    <Wz />
   </div>
 </template>
 
@@ -13,7 +12,6 @@ import HelloWorld from "./components/HelloWorld.vue";
 import Hello from "./components/Hello.vue";
 import Col from "./components/Col.vue";
 import Wz from "./components/Wz.vue";
-import gc from "./components/gc.vue";
 
 export default {
   name: "App",
@@ -22,7 +20,6 @@ export default {
     Hello,
     Col,
     Wz,
-    gc
   }
 };
 </script>

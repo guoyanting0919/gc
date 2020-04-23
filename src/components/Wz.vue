@@ -1,5 +1,10 @@
 <template>
   <div class="wzContainer">
+    <div class="btnGroup">
+      <button v-if="!isLogIn" @click="authenticate">login</button>
+      <!-- <button @click="loadClient">clientCheck</button> -->
+      <button @click="post">post</button>
+    </div>
     <div class="checkBoxGroup">
       <label for="All">
         <input value="All" type="radio" name="All" id="All" v-model="checkedNames" />All
@@ -63,6 +68,10 @@ export default {
   },
   data: function() {
     return {
+      isLogIn: false,
+      start: "",
+      end: "",
+      summary: "",
       checkedNames: "All",
       eventColor: "#378006",
       editable: false,
@@ -79,13 +88,96 @@ export default {
       calendarWeekends: true
     };
   },
+  mounted() {
+    gapi.load("client:auth2", function() {
+      gapi.auth2.init({
+        client_id:
+          "1029849860188-2p6ecjh0egiiukqcn6cvesanckp4iqg0.apps.googleusercontent.com"
+      });
+
+      console.log(gapi.client.hasOwnProperty("calendar"));
+    });
+    this.logInCheck();
+  },
   methods: {
     eventRender(info) {
+      const vm = this;
       info.el.addEventListener("click", function() {
-        console.log(info);
+        console.log(info, vm.start);
+        if (vm.isLogIn) {
+          vm.start = moment(info.event.start).format();
+          vm.end = moment(info.event.end).format();
+          vm.summary = info.event.title;
+          vm.post();
+        } else {
+          vm.authenticate();
+        }
       });
+    },
+    authenticate() {
+      const vm = this;
+      return gapi.auth2
+        .getAuthInstance()
+        .signIn({
+          scope:
+            "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events"
+        })
+        .then(
+          function() {
+            console.log("Sign-in successful");
+            console.log(gapi.client.hasOwnProperty("calendar"));
+            vm.loadClient();
+          },
+          function(err) {
+            console.error("Error signing in", err);
+          }
+        );
+    },
+    loadClient() {
+      const vm = this;
+      gapi.client.setApiKey("AIzaSyByY5wMUZ35A9lpgZqlLVJNSC3OFauCOEU");
+      return gapi.client
+        .load(
+          "https://content.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+        )
+        .then(
+          function() {
+            console.log("GAPI client loaded for API");
+            console.log(gapi.client.hasOwnProperty("calendar"));
+            vm.logInCheck();
+          },
+          function(err) {
+            console.error("Error loading GAPI client for API", err);
+          }
+        );
+    },
+    post() {
+      const vm = this;
+      return gapi.client.calendar.events
+        .insert({
+          calendarId: "primary",
+          resource: {
+            end: { dateTime: vm.end },
+            start: { dateTime: vm.start },
+            summary: vm.summary
+          }
+        })
+        .then(
+          function(response) {
+            // Handle the results here (response.result has the parsed body).
+            console.log("Response", response);
+          },
+          function(err) {
+            console.error("Execute error", err);
+          }
+        );
+    },
+    logInCheck() {
+      let check = gapi.hasOwnProperty("client");
+      check ? (this.isLogIn = true) : (this.isLogIn = false);
     }
   },
+
   computed: {
     eventColorFilter() {
       const vm = this;
