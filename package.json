@@ -30,7 +30,7 @@
     "vue-gapi": "^0.2.2",
     "vue-google-oauth2": "^1.4.3",
     "weekstart": "^1.0.1",
-    "xlsx": "^0.15.6"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.3.0",
